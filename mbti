@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>MBTI 三題一組測試 Demo</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: sans-serif;
+      background: #f7f7f7;
+    }
+    header, .question-container, .result-container {
+      width: 90%;
+      max-width: 600px;
+      margin: 1em auto;
+      background: #fff;
+      padding: 1.5em 2em;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      margin: 0; 
+      font-weight: normal;
+      text-align: center;
+    }
+    .question-step {
+      margin: 1em 0;
+    }
+    .question-step h2 {
+      margin: 0.5em 0;
+      font-size: 1.1em;
+    }
+    .options {
+      margin-top: 0.5em;
+    }
+    .option-btn {
+      display: block;
+      padding: 0.5em 1em;
+      margin-bottom: 0.5em;
+      background: #eee;
+      border: none; 
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .option-btn:hover {
+      background: #ddd;
+    }
+    .btn-next {
+      margin-top: 1em;
+      display: inline-block;
+      padding: 0.5em 1em;
+      background: #333;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+    }
+    .hidden {
+      display: none;
+    }
+    .result-container h2 {
+      margin-top: 0;
+    }
+    .result-container p {
+      line-height: 1.6;
+    }
+    .link-block {
+      text-align: center;
+      margin-top: 2em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>MBTI 測試 Demo - 三題一組</h1>
+</header>
+
+<div class="question-container" id="questionContainer">
+
+  <!-- 題目區 -->
+  <div id="q1_1" class="question-step">
+    <h2>第一大題 (1.1) - 區分 J 和 P</h2>
+    <p>「現在你手上有一份明天就要交的報告，但還沒完成。如果是你，你此刻的反應更接近哪一種？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="chooseJP('J')">
+        我會迅速列出所有待辦事項，並依計畫表執行
+        （J）
+      </button>
+      <button class="option-btn" onclick="chooseJP('P')">
+        我先大概看看要做什麼，再彈性調整
+        （P）
+      </button>
+    </div>
+  </div>
+
+  <!-- J → T/F -->
+  <div id="q1_2_J" class="question-step hidden">
+    <h2>(1.2) 針對 J 的人 - 區分 T 和 F</h2>
+    <p>「你看到一則新聞，一位民眾因制度設計不良而受害。你第一時間會？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="chooseTF('T')">
+        想到制度漏洞，想提出改進方案
+        （T）
+      </button>
+      <button class="option-btn" onclick="chooseTF('F')">
+        很氣憤，替他感到不公不義
+        （F）
+      </button>
+    </div>
+  </div>
+
+  <!-- P → N/S -->
+  <div id="q1_2_P" class="question-step hidden">
+    <h2>(1.2) 針對 P 的人 - 區分 N 和 S</h2>
+    <p>「你走在街頭，看見一片正在翻修的老房子，你會先想到什麼？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="chooseNS('N')">
+        想像之後可能改造成各種有趣空間
+        （N）
+      </button>
+      <button class="option-btn" onclick="chooseNS('S')">
+        會留意施工品質、建築本身風格
+        （S）
+      </button>
+    </div>
+  </div>
+
+  <!-- J + T → (1.3) Te / Ti -->
+  <div id="q1_3_T" class="question-step hidden">
+    <h2>(1.3) - 分 Te 和 Ti</h2>
+    <p>「若你打算寫一份改善制度的建議書，你會怎麼做？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="addFunctionScore('Te')">
+        制定計畫、尋求大家協力，追求效率
+        （Te）
+      </button>
+      <button class="option-btn" onclick="addFunctionScore('Ti')">
+        先在心中縝密思考，確定邏輯再行動
+        （Ti）
+      </button>
+    </div>
+  </div>
+
+  <!-- J + F → (1.3) Fe / Fi -->
+  <div id="q1_3_F" class="question-step hidden">
+    <h2>(1.3) - 分 Fe 和 Fi</h2>
+    <p>「如果那位受害者開募款平台，你會怎麼做？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="addFunctionScore('Fe')">
+        號召周遭人響應，一起幫助他
+        （Fe）
+      </button>
+      <button class="option-btn" onclick="addFunctionScore('Fi')">
+        若我真的感同身受，我就捐；不會刻意推廣
+        （Fi）
+      </button>
+    </div>
+  </div>
+
+  <!-- P + N → (1.3) Ne / Ni -->
+  <div id="q1_3_N" class="question-step hidden">
+    <h2>(1.3) - 分 Ne 和 Ni</h2>
+    <p>「若你想參與老房子改造，你腦中會怎麼想？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="addFunctionScore('Ne')">
+        天馬行空冒出好多點子，先都記下來
+        （Ne）
+      </button>
+      <button class="option-btn" onclick="addFunctionScore('Ni')">
+        專注某個構想並深挖可行性
+        （Ni）
+      </button>
+    </div>
+  </div>
+
+  <!-- P + S → (1.3) Se / Si -->
+  <div id="q1_3_S" class="question-step hidden">
+    <h2>(1.3) - 分 Se 和 Si</h2>
+    <p>「在這翻修區域逛時，你會著重哪一面？」</p>
+    <div class="options">
+      <button class="option-btn" onclick="addFunctionScore('Se')">
+        注意當下聲音、景色、食物，一一現場體驗
+        （Se）
+      </button>
+      <button class="option-btn" onclick="addFunctionScore('Si')">
+        回想過去見過的老房子，對比現在
+        （Si）
+      </button>
+    </div>
+  </div>
+
+  <!-- 第一大題結束，進入第二大題 -->
+  <div id="after1" class="question-step hidden">
+    <h2>第一大題完成</h2>
+    <p>你已在本組題目中選擇了一個功能。現在進入第二大題 (2.1, 2.2, 2.3) …</p>
+    <a href="#" class="btn-next" onclick="goSecondRound()">進入第二大題</a>
+  </div>
+
+  <!-- 第二大題(示意用，題目略) -->
+  <div id="q2_1" class="question-step hidden">
+    <h2>第二大題 (2.1) - 分 J 和 P</h2>
+    <p>…(此處可放置新情境)…</p>
+    <div class="options">
+      <button class="option-btn" onclick="chooseJP2('J')">
+        J 選項
+      </button>
+      <button class="option-btn" onclick="chooseJP2('P')">
+        P 選項
+      </button>
+    </div>
+  </div>
+
+  <!-- 以此類推 2.2, 2.3 可自行參考第一大題做分支 -->
+
+</div>
+
+<div class="result-container hidden" id="resultContainer">
+  <h2>測試結果</h2>
+  <p id="functionScores"></p>
+  <p id="finalRemark"></p>
+  <div class="link-block">
+    <p>（示範連結）</p>
+    <a href="https://www.example.com/mbti_test.html" target="_blank">前往最終成品頁面</a>
+  </div>
+</div>
+
+<script>
+  // 用來紀錄各功能得分
+  const scores = {
+    'Te': 0, 'Ti': 0, 'Fe': 0, 'Fi': 0,
+    'Ne': 0, 'Ni': 0, 'Se': 0, 'Si': 0
+  };
+
+  /* ============== 第一大題 ============= */
+  function chooseJP(value) {
+    // 選J or P
+    document.getElementById("q1_1").classList.add("hidden");
+    if (value === 'J') {
+      document.getElementById("q1_2_J").classList.remove("hidden");
+    } else {
+      document.getElementById("q1_2_P").classList.remove("hidden");
+    }
+  }
+
+  function chooseTF(value) {
+    // (1.2) 選 T or F
+    document.getElementById("q1_2_J").classList.add("hidden");
+    if (value === 'T') {
+      document.getElementById("q1_3_T").classList.remove("hidden");
+    } else {
+      document.getElementById("q1_3_F").classList.remove("hidden");
+    }
+  }
+
+  function chooseNS(value) {
+    // (1.2) 選 N or S
+    document.getElementById("q1_2_P").classList.add("hidden");
+    if (value === 'N') {
+      document.getElementById("q1_3_N").classList.remove("hidden");
+    } else {
+      document.getElementById("q1_3_S").classList.remove("hidden");
+    }
+  }
+
+  function addFunctionScore(func) {
+    // 第1大題第3題確定功能 (Te/Ti/Fe/Fi/Ne/Ni/Se/Si)
+    scores[func]++;
+    
+    // 把所有 1.3 題目隱藏
+    ["q1_3_T","q1_3_F","q1_3_N","q1_3_S"].forEach(id => {
+      document.getElementById(id).classList.add("hidden");
+    });
+    
+    // 顯示「第一大題完成」區塊
+    document.getElementById("after1").classList.remove("hidden");
+  }
+
+  /* ============== 第二大題（示意） ============= */
+  function goSecondRound() {
+    // 隱藏 after1
+    document.getElementById("after1").classList.add("hidden");
+    // 顯示 q2_1
+    document.getElementById("q2_1").classList.remove("hidden");
+  }
+
+  function chooseJP2(value) {
+    // 與 chooseJP 類似，分J/P後顯示 q2_2_J / q2_2_P
+    // 這裡僅示範
+    document.getElementById("q2_1").classList.add("hidden");
+    // 你可以繼續設計 2.2, 2.3
+    // 為了展示結束流程，直接顯示結果
+    showResult();
+  }
+
+  function showResult() {
+    document.getElementById("questionContainer").classList.add("hidden");
+    document.getElementById("resultContainer").classList.remove("hidden");
+
+    // 簡易顯示各功能得分
+    let text = "";
+    for(const f in scores) {
+      text += `${f}: ${scores[f]} 分<br/>`;
+    }
+    document.getElementById("functionScores").innerHTML = text;
+
+    // 根據最高分功能給簡單敘述
+    // （真實情況可做更細緻判斷）
+    const maxFunc = Object.keys(scores).reduce((a,b) => scores[a] > scores[b] ? a : b );
+    let remark = "";
+    switch(maxFunc) {
+      case 'Te':
+        remark = "你偏好外傾邏輯（Te），擅長組織與效率。";
+        break;
+      case 'Ti':
+        remark = "你偏好內傾邏輯（Ti），追求自我系統與理性分析。";
+        break;
+      case 'Fe':
+        remark = "你偏好外傾情感（Fe），重視社群和諧與他人感受。";
+        break;
+      case 'Fi':
+        remark = "你偏好內傾情感（Fi），重視自身價值與感受。";
+        break;
+      case 'Ne':
+        remark = "你偏好外傾直覺（Ne），天馬行空、創意無限。";
+        break;
+      case 'Ni':
+        remark = "你偏好內傾直覺（Ni），深度洞察與專注。";
+        break;
+      case 'Se':
+        remark = "你偏好外傾實感（Se），注重當下、積極體驗。";
+        break;
+      case 'Si':
+        remark = "你偏好內傾實感（Si），依賴記憶與傳統，重視過往經驗。";
+        break;
+    }
+    document.getElementById("finalRemark").innerHTML = `最高分功能：<b>${maxFunc}</b><br/>${remark}`;
+  }
+</script>
+
+</body>
+</html>
